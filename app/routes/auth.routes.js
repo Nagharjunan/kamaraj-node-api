@@ -10,5 +10,5 @@ module.exports = (app) => {
   });
 
   app.post("/signup", controller.signup);
-  app.use("/signin", controller.signin);
+  app.get("/signin", controller.signin);
 };

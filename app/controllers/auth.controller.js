@@ -34,38 +34,42 @@ exports.signup = async (req, res) => {
   }
 };
 
-exports.signin = (req, res) => {
-  User.findOne({
-    username: req.body.username,
-  }).exec((err, user) => {
-    if (err) {
-      res.status(500).send({ message: err });
-      return;
-    }
-    if (!user) {
+exports.signin = async (req, res) => {
+  try {
+    const isUserPresent = await User.findOne({ email: req.body.email });
+    console.log(isUserPresent);
+
+    if (!isUserPresent) {
+      console.log("inside if");
       return res.status(404).send({ message: "User Not found, Contact Admin" });
+    } else {
+      console.log("inside else");
+      var passwordIsValid = bcrypt.compareSync(
+        req.body.password,
+        isUserPresent.password
+      );
+      console.log("inside else after pass");
+      if (!passwordIsValid) {
+        return res
+          .status(401)
+          .send({ accessToken: null, message: "Invalid Password" });
+      }
+      console.log("jwt sign");
+      const token = jwt.sign({ id: isUserPresent.id }, config.secret, {
+        algorithm: "HS256",
+        allowInsecureKeySizes: true,
+        expiresIn: 86400,
+      });
+      console.log("final sent");
+      res.status(200).send({
+        id: isUserPresent._id,
+        username: isUserPresent.username,
+        email: isUserPresent.email,
+        role: isUserPresent.role,
+        accessToken: token,
+      });
     }
-
-    var passwordIsValid = bcrypt.compareSync(req.body.password, user.password);
-
-    if (!passwordIsValid) {
-      return res
-        .status(401)
-        .send({ accessToken: null, message: "Invalid Password" });
-    }
-
-    const token = jwt.sign({ id: user.id }, config.secret, {
-      algorithm: "HS256",
-      allowInsecureKeySizes: true,
-      expiresIn: 86400,
-    });
-
-    res.status(200).send({
-      id: user._id,
-      username: user.username,
-      email: user.email,
-      role: user.role,
-      accessToken: token,
-    });
-  });
+  } catch (err) {
+    return res.status(500).send({ message: err });
+  }
 };
