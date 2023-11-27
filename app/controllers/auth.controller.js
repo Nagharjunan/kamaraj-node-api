@@ -5,38 +5,33 @@ const User = db.user;
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
 
-exports.signup = (req, res) => {
-  console.log(req.body);
+exports.signup = async (req, res) => {
+  const isDuplicateUser = await User.findOne({
+    username: req.body.username,
+  });
+  console.log(isDuplicateUser);
+  if (isDuplicateUser) {
+    res
+      .status(409)
+      .send({ message: "User Already Exists, try contacting Admin" });
+  } else {
+    const user = new User({
+      username: req.body.username,
+      email: req.body.email,
+      password: bcrypt.hashSync(req.body.password, 8),
+      role: req.body.role,
+    });
 
-  // user.save((err, user) => {
-  // if (err) {
-  //   res.status(500).send({ message: err });
-  // }
-
-  User.findOne({ username: req.body.username }).then(() => {
-    if (err) {
+    try {
+      const response = await user.save();
+      console.log(response);
+      res.status(200).send({ message: "User was registered successfully!" });
+      return;
+    } catch (err) {
       res.status(500).send({ message: err });
       return;
     }
-  });
-
-  const user = new User({
-    username: req.body.username,
-    email: req.body.email,
-    password: bcrypt.hashSync(req.body.password, 8),
-    role: req.body.role,
-  });
-
-  user
-    .save()
-    .then(() => {
-      res.send({ message: "User was registered successfully!" });
-    })
-    .catch((err) => {
-      res.send({ message: "User registration failed!" });
-    });
-
-  // });
+  }
 };
 
 exports.signin = (req, res) => {
