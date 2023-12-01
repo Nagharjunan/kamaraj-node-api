@@ -11,3 +11,50 @@ exports.getProducts = async (req, res, next) => {
   const response = await Product.find({});
   res.status(200).send({ message: "fetch success", value: response });
 };
+
+exports.createProduct = async (req, res, next) => {
+  const isDuplicateProduct = await Product.findOne({
+    productCode: req.body.productCode,
+  });
+  if (isDuplicateProduct) {
+    return res.status(409).send({ message: "Product Already Exists" });
+  }
+
+  const product = new Product({
+    productCode: req.body.productCode,
+    productName: req.body.productName,
+    HSN_Code: req.body.HSN_Code,
+    unit: req.body.unit,
+    purchaseRate: req.body.purchaseRate,
+    GST: req.body.GST,
+    salesRate: req.body.salesRate,
+    CGST: req.body.CGST,
+    SGST: req.body.SGST,
+    IGST: req.body.IGST,
+    reOrderLevel: req.body.reOrderLevel,
+  });
+  try {
+    const response = await product.save();
+    return res.status(200).send({ message: "Product Successfully Created" });
+  } catch (err) {
+    return res
+      .status(500)
+      .send({ message: "Product Creation Failed", error: err });
+  }
+};
+
+exports.deleteProduct = async (req, res) => {
+  const isProductAvailable = await Product.findOne({
+    _id: req.body._id,
+  });
+
+  if (!isProductAvailable) {
+    return res.status(404).send({ message: "Product Not Found" });
+  }
+  try {
+    const response = await Product.findByIdAndDelete(req.body._id);
+    return res.status(200).send({ message: "Product Deleted Successfully" });
+  } catch (err) {
+    return res.status(500).send({ message: "Product Deletion Failed" });
+  }
+};

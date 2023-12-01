@@ -12,4 +12,6 @@ module.exports = (app) => {
 
   //   app.post("/setproducts", [authJwt.verifyToken], controller.setProducts);
   app.get("/getproducts", [authJwt.verifyToken], controller.getProducts);
+  app.post("/createproduct", [authJwt.verifyToken], controller.createProduct);
+  app.delete("/deleteproduct", [authJwt.verifyToken], controller.deleteProduct);
 };
