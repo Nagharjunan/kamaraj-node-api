@@ -8,8 +8,12 @@ const Product = db.product;
 // };
 
 exports.getProducts = async (req, res, next) => {
-  const response = await Product.find({});
-  res.status(200).send({ message: "fetch success", value: response });
+  try {
+    const response = await Product.find({});
+    res.status(200).send({ message: "Fetch Success", value: response });
+  } catch (err) {
+    res.status(500).send({ message: "Fetch Failed", error: err });
+  }
 };
 
 exports.createProduct = async (req, res, next) => {
@@ -40,6 +44,21 @@ exports.createProduct = async (req, res, next) => {
     return res
       .status(500)
       .send({ message: "Product Creation Failed", error: err });
+  }
+};
+
+exports.updateProduct = async (req, res) => {
+  const isProductAvailable = await Product.findOne({
+    _id: req.body._id,
+  });
+  if (!isProductAvailable) {
+    return res.status(404).send({ message: "Product Not Found" });
+  }
+  try {
+    const response = await Product.findByIdAndUpdate(req.body._id);
+    return res.status(200).send({ message: "Product Updated Successfully" });
+  } catch (err) {
+    return res.status(500).send({ message: "Product Updation Failed" });
   }
 };
 
