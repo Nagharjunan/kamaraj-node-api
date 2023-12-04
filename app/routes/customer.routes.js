@@ -13,7 +13,7 @@ module.exports = (app) => {
   //   app.post("/setcustomers", [authJwt.verifyToken], controller.setcustomers);
   app.get("/getcustomers", [authJwt.verifyToken], controller.getCustomers);
   app.post("/createcustomer", [authJwt.verifyToken], controller.createCustomer);
-  app.update(
+  app.patch(
     "/updatecustomer",
     [authJwt.verifyToken],
     controller.updateCustomer
