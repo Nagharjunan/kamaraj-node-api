@@ -11,6 +11,14 @@ const Order = mongoose.model(
       type: String,
       required: true,
     },
+    approved: {
+      type: {
+        isApproved: Boolean,
+        approvedBy: String,
+        approvalDate: String,
+      },
+      required: true,
+    },
     modifiedBy: {
       modifiedDate: String,
       modifiedUser: String,
