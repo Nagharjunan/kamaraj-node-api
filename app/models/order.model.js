@@ -11,6 +11,14 @@ const Order = mongoose.model(
       type: String,
       required: true,
     },
+    paymentMode: {
+      type: String,
+      required: true,
+    },
+    orderStatus: {
+      type: String,
+      required: true,
+    },
     approved: {
       type: {
         isApproved: Boolean,

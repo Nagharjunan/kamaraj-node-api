@@ -9,5 +9,11 @@ module.exports = (app) => {
     );
     next();
   });
-  app.post("/createOrder", [authJwt.verifyToken], controller.createOrder);
+  app.post("/createorder", [authJwt.verifyToken], controller.createOrder);
+  app.get("/getorders", [authJwt.verifyToken], controller.getAllOrders);
+  app.get(
+    "/sendorderpdf/:orderId",
+    [authJwt.verifyToken],
+    controller.fetchOrderAndSendPDF
+  );
 };
