@@ -62,11 +62,14 @@ exports.signin = async (req, res) => {
       });
       console.log("final sent");
       res.status(200).send({
-        id: isUserPresent._id,
-        username: isUserPresent.username,
-        email: isUserPresent.email,
-        role: isUserPresent.role,
-        accessToken: token,
+        message: "Login Success",
+        value: {
+          id: isUserPresent._id,
+          username: isUserPresent.username,
+          email: isUserPresent.email,
+          role: isUserPresent.role,
+          accessToken: token,
+        },
       });
     }
   } catch (err) {
