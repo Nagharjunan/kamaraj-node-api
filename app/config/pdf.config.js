@@ -334,5 +334,5 @@ function generateWords(number) {
   }
 
   words.push(word);
-  return generateWords(words);
+  return generateWords(remainder, words);
 }
