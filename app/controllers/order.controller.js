@@ -1,5 +1,6 @@
+const { setPdfContent } = require("../config/pdf.config");
 const db = require("../models");
-const PDFDocument = require("jspdf");
+const jsPDF = require("jspdf").jsPDF;
 const nodemailer = require("nodemailer");
 const Order = db.order;
 
@@ -12,7 +13,7 @@ exports.createOrder = async (req, res) => {
     orderStatus: req.body.orderStatus,
     approved: req.body.approved,
     modifiedBy: req.body.modifiedBy,
-    orderedFor: req.body.customer,
+    orderedFor: req.body.orderedFor,
     orderList: req.body.orderList,
   });
 
@@ -29,7 +30,7 @@ exports.createOrder = async (req, res) => {
 exports.getAllOrders = async (req, res) => {
   try {
     const response = await Order.find({});
-    return res.status(200).send(response);
+    return res.status(200).send({ message: "Fetch Success", value: response });
   } catch (err) {
     return res.status(500).send({ message: "Error while fetching orders" });
   }
@@ -37,23 +38,52 @@ exports.getAllOrders = async (req, res) => {
 
 exports.fetchOrderAndSendPDF = async (req, res) => {
   const orderId = req.params.orderId;
-
   try {
     const order = await Order.findById(orderId);
 
     if (!order) {
       return res.status(404).send({ message: "Order not found" });
     }
+    const orderLength = await Order.find({}).countDocuments();
 
-    const doc = new jsPDF();
-    doc.text(`Order ID: ${order._id}`);
-    doc.text(`Order Date: ${order.orderDate}`);
-    doc.text(`Ordered By: ${order.orderedBy}`);
-    // Add more order details as needed
+    let companyName = "Nagharjuna Foods";
+    let addressLine1 = "9,ARASU NAGAR,MALAI KOVIL ST.,";
+    let addressLine2 = "MUTHAMPALAYAM PHASE III";
+    let addressLine3 = "KASIPALAYAM, ERODE. CEL 90430 25052.";
+    let gstNo = "GSTIN 33AAGFN 0326E1ZP";
+    let fssaiNo = "FSSAI 124 190 010 000 11";
 
-    doc.save("order.pdf");
+    let doc = new jsPDF();
 
-    // const pdfBuffer = doc.output("arraybuffer");
+    doc.rect(
+      5,
+      5,
+      doc.internal.pageSize.width - 10,
+      doc.internal.pageSize.height - 10
+    );
+
+    doc.rect(5, 45, doc.internal.pageSize.width - 10, 50);
+    doc.rect(5, 45, doc.internal.pageSize.width - 110, 50);
+
+    doc = await setPdfContent(
+      doc,
+      order,
+      orderLength,
+      companyName,
+      addressLine1,
+      addressLine2,
+      addressLine3,
+      gstNo,
+      fssaiNo
+    );
+
+    const pdfBuffer = doc.output("arraybuffer");
+    res.writeHead(200, {
+      "Content-Type": "application/pdf",
+      "Content-Disposition": "inline; filename=sample.pdf",
+      "Content-Length": pdfBuffer.byteLength,
+    });
+    res.end(Buffer.from(pdfBuffer));
 
     // const transporter = nodemailer.createTransport({
     //   // Configure your email transporter here

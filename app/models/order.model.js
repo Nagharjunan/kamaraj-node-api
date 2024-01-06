@@ -61,6 +61,7 @@ const Order = mongoose.model(
         SGST: String,
         IGST: String,
         reOrderLevel: String,
+        qty: String,
       },
     ],
   })
