@@ -54,7 +54,7 @@ function setBillAddressBlock(doc, order) {
     doc.text(`${customerSplit[0]}`, 27, 55);
     doc.text(`${customerSplit[1]}`, 27, 60);
   } else {
-    doc.text(`${order.orderedFor.customerName}`, 27, 60);
+    doc.text(`${order.orderedFor.customerName}`, 27, 55);
   }
   doc.setFont("times", "normal");
   doc.text("Address: ", 10, 65);
@@ -86,7 +86,7 @@ function setShipAddressBlock(doc, order) {
     doc.text(`${customerSplit[0]}`, 127, 55);
     doc.text(`${customerSplit[1]}`, 127, 60);
   } else {
-    doc.text(`${order.orderedFor.customerName}`, 30, 60);
+    doc.text(`${order.orderedFor.customerName}`, 127, 55);
   }
   doc.setFont("times", "normal");
   doc.text("Address: ", 110, 65);
