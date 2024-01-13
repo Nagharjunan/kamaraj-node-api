@@ -140,32 +140,37 @@ function setOrderList(doc, order) {
   let totalAmount = 0;
   let totalCGST = 0;
   order.orderList.forEach((item, index) => {
-    totalAmount += item.salesRate * 10;
-    const temp = (item.salesRate * 10 * (item.CGST / 100)).toFixed(2);
+    totalAmount += item.salesRate * item.qty;
+    const temp = (item.salesRate * item.qty * (item.CGST / 100)).toFixed(2);
     totalCGST += parseFloat(temp);
 
     doc.text(`${index + 1}`, 8, 115 + index * 5);
     doc.text(`${item.productName}`, 15, 115 + index * 5);
     doc.text(`${item.HSN_Code}`, 82, 115 + index * 5);
-    doc.text(`${"800"}`, 96, 115 + index * 5);
+    doc.text(`${item.qty}`, 96, 115 + index * 5);
     doc.text(`${item.unit}`, 111.5, 115 + index * 5, { align: "center" });
     doc.text(`${parseFloat(item.salesRate).toFixed(2)}`, 133, 115 + index * 5, {
       align: "right",
     });
     // change to qty
-    doc.text(`${(item.salesRate * 10).toFixed(2)}`, 152, 115 + index * 5, {
-      align: "right",
-    });
+    doc.text(
+      `${(item.salesRate * item.qty).toFixed(2)}`,
+      152,
+      115 + index * 5,
+      {
+        align: "right",
+      }
+    );
     doc.text(`${item.CGST}`, 158, 115 + index * 5);
     doc.text(
-      `${(item.salesRate * 10 * (item.CGST / 100)).toFixed(2)}`,
+      `${(item.salesRate * item.qty * (item.CGST / 100)).toFixed(2)}`,
       178,
       115 + index * 5,
       { align: "right" }
     );
     doc.text(`${item.SGST}`, 188.5, 115 + index * 5, { align: "right" });
     doc.text(
-      `${(item.salesRate * 10 * (item.SGST / 100)).toFixed(2)}`,
+      `${(item.salesRate * item.qty * (item.SGST / 100)).toFixed(2)}`,
       203,
       115 + index * 5,
       { align: "right" }

@@ -50,8 +50,8 @@ exports.fetchOrderAndSendPDF = async (req, res) => {
     let addressLine1 = "9,ARASU NAGAR,MALAI KOVIL ST.,";
     let addressLine2 = "MUTHAMPALAYAM PHASE III";
     let addressLine3 = "KASIPALAYAM, ERODE. CEL 90430 25052.";
-    let gstNo = "GSTIN 33AAGFN 0326E1ZP";
-    let fssaiNo = "FSSAI 124 190 010 000 11";
+    let gstNo = "33AJXPR7429L1Z9";
+    let fssaiNo = "12419007000519";
 
     let doc = new jsPDF();
 
