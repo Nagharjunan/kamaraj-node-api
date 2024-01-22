@@ -3,9 +3,11 @@ const db = require("../models");
 const jsPDF = require("jspdf").jsPDF;
 const nodemailer = require("nodemailer");
 const Order = db.order;
+const OrderID = db.orderID;
 
 exports.createOrder = async (req, res) => {
-  console.log(req.body);
+  const orderID = await OrderID.find({});
+
   const order = new Order({
     orderDate: req.body.orderDate,
     orderedBy: req.body.orderedBy,
@@ -15,10 +17,16 @@ exports.createOrder = async (req, res) => {
     modifiedBy: req.body.modifiedBy,
     orderedFor: req.body.orderedFor,
     orderList: req.body.orderList,
+    orderId: orderID[0].orderId,
   });
 
   try {
     const response = await order.save();
+    const newOrderID = orderID[0].orderId + 1;
+    await OrderID.updateOne(
+      { _id: orderID[0]._id },
+      { $set: { orderId: newOrderID } }
+    );
     return res.status(200).send({ message: "Order Successfully Created" });
   } catch (err) {
     return res
@@ -44,7 +52,6 @@ exports.fetchOrderAndSendPDF = async (req, res) => {
     if (!order) {
       return res.status(404).send({ message: "Order not found" });
     }
-    const orderLength = await Order.find({}).countDocuments();
 
     let companyName = "Nagharjuna Foods";
     let addressLine1 = "9,ARASU NAGAR,MALAI KOVIL ST.,";
@@ -68,7 +75,6 @@ exports.fetchOrderAndSendPDF = async (req, res) => {
     doc = await setPdfContent(
       doc,
       order,
-      orderLength,
       companyName,
       addressLine1,
       addressLine2,

@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { Order, OrderID } = require("./order.model");
 
 mongoose.Promise = global.Promise;
 
@@ -9,6 +10,7 @@ db.mongoose = mongoose;
 db.user = require("./user.model");
 db.product = require("./product.model");
 db.customer = require("./customer.model");
-db.order = require("./order.model");
+db.order = Order;
+db.orderID = OrderID;
 
 module.exports = db;

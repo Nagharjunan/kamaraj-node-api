@@ -1,7 +1,6 @@
 exports.setPdfContent = async (
   doc,
   order,
-  orderLength,
   companyName,
   addressLine1,
   addressLine2,
@@ -25,7 +24,7 @@ exports.setPdfContent = async (
   doc.setFont("times", "bold");
   doc.text("TAX INVOICE NO: ", 150, 20);
   doc.setFont("times", "normal");
-  doc.text("251", 183, 20);
+  doc.text(`${order.orderId}`, 183, 20);
   doc.setFont("times", "bold");
   doc.text(`INVOICE DATE: `, 150, 25);
   doc.setFont("times", "normal");

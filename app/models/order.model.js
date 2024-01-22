@@ -1,10 +1,21 @@
 const mongoose = require("mongoose");
 
+const OrderID = mongoose.model(
+  "orderid",
+  new mongoose.Schema({
+    orderId: Number,
+  })
+);
+
 const Order = mongoose.model(
   "Order",
   new mongoose.Schema({
     orderDate: {
       type: String,
+      required: true,
+    },
+    orderId: {
+      type: Number,
       required: true,
     },
     orderedBy: {
@@ -67,4 +78,4 @@ const Order = mongoose.model(
   })
 );
 
-module.exports = Order;
+module.exports = { Order, OrderID };
