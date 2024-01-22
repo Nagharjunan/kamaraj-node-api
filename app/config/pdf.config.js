@@ -23,14 +23,13 @@ exports.setPdfContent = async (
   doc.text("SALES INVOICE", 94, 42);
 
   doc.setFont("times", "bold");
-  doc.text("TAX INVOICE: ", 150, 15);
-  doc.text(`Order ID: `, 150, 20);
+  doc.text("TAX INVOICE NO: ", 150, 20);
   doc.setFont("times", "normal");
-  doc.text(`${orderLength}`, 173, 20);
+  doc.text("251", 183, 20);
   doc.setFont("times", "bold");
-  doc.text(`Order Date: `, 150, 25);
+  doc.text(`INVOICE DATE: `, 150, 25);
   doc.setFont("times", "normal");
-  doc.text(`${new Date(order.orderDate).toLocaleDateString()}`, 173, 25);
+  doc.text(`${new Date(order.orderDate).toLocaleDateString()}`, 183, 25);
   doc.setFont("times", "bold");
   doc.text(`Sales Mode: `, 150, 30);
   doc.setFont("times", "normal");
@@ -65,9 +64,9 @@ function setBillAddressBlock(doc, order) {
   doc.text(`${order.orderedFor.phoneNumber}`, 27, 80);
   doc.text("Alt Phone: ", 57, 80);
   // doc.text(`${order.orderedFor.altPhoneNumber}`, 80, 80);
-  doc.text("1234567890", 77, 80);
+  doc.text("", 77, 80);
   doc.text("GSTIN: ", 10, 85);
-  doc.text(`${order.orderedFor.gstNumber}`, 27, 85);
+  doc.text(`${order.orderedFor.gstNumber || "NIL"}`, 27, 85);
   doc.text("State: ", 10, 90);
   doc.text(`${order.orderedFor.state}`, 27, 90);
   doc.text("State Code: ", 57, 90);
@@ -97,9 +96,9 @@ function setShipAddressBlock(doc, order) {
   doc.text(`${order.orderedFor.phoneNumber}`, 127, 80);
   doc.text("Alt Phone: ", 157, 80);
   // doc.text(`${order.orderedFor.altPhoneNumber}`, 80, 80);
-  doc.text("1234567890", 177, 80);
+  doc.text("", 177, 80);
   doc.text("GSTIN: ", 110, 85);
-  doc.text(`${order.orderedFor.gstNumber}`, 127, 85);
+  doc.text(`${order.orderedFor.gstNumber || "NIL"}`, 127, 85);
   doc.text("State: ", 110, 90);
   doc.text(`${order.orderedFor.state}`, 127, 90);
   doc.text("State Code: ", 157, 90);
@@ -110,7 +109,7 @@ function setShipAddressBlock(doc, order) {
 function setOrderList(doc, order) {
   doc.rect(5, 110, doc.internal.pageSize.width - 10, 130);
   doc.line(13, 95, 13, 240);
-  doc.line(80, 95, 80, 240);
+  doc.line(75, 95, 75, 240);
   doc.line(93, 95, 93, 240);
   doc.line(105, 95, 105, 240);
   doc.line(118, 95, 118, 240);
@@ -122,8 +121,8 @@ function setOrderList(doc, order) {
 
   doc.text("No.", 7, 100);
   doc.text("Product Name", 15, 100);
-  doc.text("HSN", 82, 100);
-  doc.text("Code", 82, 105);
+  doc.text("HSN", 77, 100);
+  doc.text("Code", 77, 105);
   doc.text("QTY", 95, 100);
   doc.text("Unit", 108, 100);
   doc.text("Sales Rate", 120, 100);
@@ -146,7 +145,7 @@ function setOrderList(doc, order) {
 
     doc.text(`${index + 1}`, 8, 115 + index * 5);
     doc.text(`${item.productName}`, 15, 115 + index * 5);
-    doc.text(`${item.HSN_Code}`, 82, 115 + index * 5);
+    doc.text("17021110", 76, 115 + index * 5);
     doc.text(`${item.qty}`, 96, 115 + index * 5);
     doc.text(`${item.unit}`, 111.5, 115 + index * 5, { align: "center" });
     doc.text(`${parseFloat(item.salesRate).toFixed(2)}`, 133, 115 + index * 5, {
