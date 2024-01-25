@@ -55,7 +55,7 @@ exports.updateProduct = async (req, res) => {
     return res.status(404).send({ message: "Product Not Found" });
   }
   try {
-    const response = await Product.findByIdAndUpdate(req.body._id);
+    const response = await Product.findByIdAndUpdate(req.body._id, req.body);
     return res.status(200).send({ message: "Product Updated Successfully" });
   } catch (err) {
     return res.status(500).send({ message: "Product Updation Failed" });
@@ -64,14 +64,14 @@ exports.updateProduct = async (req, res) => {
 
 exports.deleteProduct = async (req, res) => {
   const isProductAvailable = await Product.findOne({
-    _id: req.body._id,
+    _id: req.params.id,
   });
 
   if (!isProductAvailable) {
     return res.status(404).send({ message: "Product Not Found" });
   }
   try {
-    const response = await Product.findByIdAndDelete(req.body._id);
+    const response = await Product.findByIdAndDelete(req.params.id);
     return res.status(200).send({ message: "Product Deleted Successfully" });
   } catch (err) {
     return res.status(500).send({ message: "Product Deletion Failed" });
