@@ -28,7 +28,7 @@ exports.setPdfContent = async (
   doc.setFont("times", "bold");
   doc.text(`INVOICE DATE: `, 150, 25);
   doc.setFont("times", "normal");
-  doc.text(`${new Date(order.orderDate).toLocaleDateString()}`, 183, 25);
+  doc.text(`${new Date(order.orderDate).toLocaleDateString("en-GB")}`, 183, 25);
   doc.setFont("times", "bold");
   doc.text(`Sales Mode: `, 150, 30);
   doc.setFont("times", "normal");
