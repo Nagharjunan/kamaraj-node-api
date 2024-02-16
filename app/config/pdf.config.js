@@ -144,7 +144,7 @@ function setOrderList(doc, order) {
 
     doc.text(`${index + 1}`, 8, 115 + index * 5);
     doc.text(`${item.productName}`, 15, 115 + index * 5);
-    doc.text("17021110", 76, 115 + index * 5);
+    doc.text(`${item.HSN_Code}`, 76, 115 + index * 5);
     doc.text(`${item.qty}`, 96, 115 + index * 5);
     doc.text(`${item.unit}`, 111.5, 115 + index * 5, { align: "center" });
     doc.text(`${parseFloat(item.salesRate).toFixed(2)}`, 133, 115 + index * 5, {
