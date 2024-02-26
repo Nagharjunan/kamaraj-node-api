@@ -71,15 +71,23 @@ exports.getPendingOrders = async (req, res) => {
 };
 
 exports.setOrderApproval = async (req, res) => {
-  const response = await Order.findById(req.params.orderId);
-  console.log("OrderID", req.params.orderId, response);
+  const response = await Order.findById(req.body.orderId);
   if (!response) {
     res.status(404).send({ message: "No Orders Found", error: {} });
   }
   try {
     await Order.updateOne(
-      { _id: req.params.orderId },
-      { $set: { orderStatus: "approved" } }
+      { _id: req.body.orderId },
+      {
+        $set: {
+          orderStatus: "approved",
+          approved: {
+            isApproved: true,
+            approvedBy: req.body.approvedBy,
+            approvalDate: Date.now(),
+          },
+        },
+      }
     );
     return res.status(200).send({ message: "Order Approved Successfully" });
   } catch (err) {

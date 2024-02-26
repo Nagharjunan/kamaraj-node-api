@@ -21,8 +21,8 @@ module.exports = (app) => {
     [authJwt.verifyToken],
     controller.getPendingOrders
   );
-  app.get(
-    "/setorderapproval/:orderId",
+  app.post(
+    "/setorderapproval",
     [authJwt.verifyToken],
     controller.setOrderApproval
   );
