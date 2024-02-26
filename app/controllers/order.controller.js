@@ -40,8 +40,22 @@ exports.getAllOrders = async (req, res) => {
     const response = await Order.find({});
     return res.status(200).send({ message: "Fetch Success", value: response });
   } catch (err) {
-    return res.status(500).send({ message: "Error while fetching orders" });
+    return res
+      .status(500)
+      .send({ message: "Error while fetching orders", error: err });
   }
+};
+
+exports.getMyOrders = async (req, res) => {
+  try {
+    const response = await Order.find({
+      orderedBy: req.params.orderedBy,
+    });
+    if (!response.length) {
+      res.status(404).send({ message: "No Orders Found", error: {} });
+    }
+    res.status(200).send({ message: "Orders Found", value: response });
+  } catch (err) {}
 };
 
 exports.fetchOrderAndSendPDF = async (req, res) => {

@@ -12,6 +12,11 @@ module.exports = (app) => {
   app.post("/createorder", [authJwt.verifyToken], controller.createOrder);
   app.get("/getorders", [authJwt.verifyToken], controller.getAllOrders);
   app.get(
+    "/getmyorders/:orderedBy",
+    [authJwt.verifyToken],
+    controller.getMyOrders
+  );
+  app.get(
     "/sendorderpdf/:orderId",
     [authJwt.verifyToken],
     controller.fetchOrderAndSendPDF
