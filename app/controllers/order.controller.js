@@ -58,6 +58,37 @@ exports.getMyOrders = async (req, res) => {
   } catch (err) {}
 };
 
+exports.getPendingOrders = async (req, res) => {
+  try {
+    const response = await Order.find({
+      orderStatus: "pending",
+    });
+    if (!response.length) {
+      res.status(404).send({ message: "No Orders Found", error: {} });
+    }
+    res.status(200).send({ message: "Orders Found", value: response });
+  } catch (err) {}
+};
+
+exports.setOrderApproval = async (req, res) => {
+  const response = await Order.findById(req.params.orderId);
+  console.log("OrderID", req.params.orderId, response);
+  if (!response) {
+    res.status(404).send({ message: "No Orders Found", error: {} });
+  }
+  try {
+    await Order.updateOne(
+      { _id: req.params.orderId },
+      { $set: { orderStatus: "approved" } }
+    );
+    return res.status(200).send({ message: "Order Approved Successfully" });
+  } catch (err) {
+    return res
+      .status(500)
+      .send({ message: "Order Approval Failed", error: err });
+  }
+};
+
 exports.fetchOrderAndSendPDF = async (req, res) => {
   const orderId = req.params.orderId;
   try {

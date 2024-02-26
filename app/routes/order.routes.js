@@ -17,6 +17,16 @@ module.exports = (app) => {
     controller.getMyOrders
   );
   app.get(
+    "/getpendingorders",
+    [authJwt.verifyToken],
+    controller.getPendingOrders
+  );
+  app.get(
+    "/setorderapproval/:orderId",
+    [authJwt.verifyToken],
+    controller.setOrderApproval
+  );
+  app.get(
     "/sendorderpdf/:orderId",
     [authJwt.verifyToken],
     controller.fetchOrderAndSendPDF
