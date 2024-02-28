@@ -18,6 +18,7 @@ exports.createOrder = async (req, res) => {
     orderedFor: req.body.orderedFor,
     orderList: req.body.orderList,
     orderId: orderID[0].orderId,
+    paymentDetails: req.body.paymentDetails,
   });
 
   try {
@@ -47,6 +48,7 @@ exports.getAllOrders = async (req, res) => {
 };
 
 exports.getMyOrders = async (req, res) => {
+  // not used in UI
   try {
     const response = await Order.find({
       orderedBy: req.params.orderedBy,

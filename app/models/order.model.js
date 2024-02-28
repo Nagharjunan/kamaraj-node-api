@@ -38,6 +38,14 @@ const Order = mongoose.model(
       },
       required: true,
     },
+    paymentDetails: {
+      type: {
+        isPaymentDone: Boolean,
+        paymentMethod: String,
+        paymentDate: String,
+      },
+      required: true,
+    },
     modifiedBy: {
       modifiedDate: String,
       modifiedUser: String,
