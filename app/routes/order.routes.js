@@ -21,6 +21,12 @@ module.exports = (app) => {
     [authJwt.verifyToken],
     controller.getPendingOrders
   );
+  app.post("/updateorder", [authJwt.verifyToken], controller.updateOrder);
+  app.get(
+    "/deleteorder/:orderid",
+    [authJwt.verifyToken],
+    controller.deleteOrder
+  );
   app.post(
     "/setorderapproval",
     [authJwt.verifyToken],

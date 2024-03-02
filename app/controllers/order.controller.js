@@ -48,7 +48,6 @@ exports.getAllOrders = async (req, res) => {
 };
 
 exports.getMyOrders = async (req, res) => {
-  // not used in UI
   try {
     const response = await Order.find({
       orderedBy: req.params.orderedBy,
@@ -70,6 +69,40 @@ exports.getPendingOrders = async (req, res) => {
     }
     res.status(200).send({ message: "Orders Found", value: response });
   } catch (err) {}
+};
+
+exports.updateOrder = async (req, res) => {
+  const isOrderAvailable = await Order.findOne({
+    _id: req.body._id,
+  });
+
+  if (!isOrderAvailable) {
+    return res.status(404).send({ message: "Order Not Found" });
+  }
+  try {
+    const response = await Order.findByIdAndUpdate(req.body._id, req.body);
+    return res.status(200).send({ message: "Order Updated Successfully" });
+  } catch (err) {
+    return res.status(500).send({ message: "Order Updation Failed" });
+  }
+};
+
+exports.deleteOrder = async (req, res) => {
+  const isOrderAvailable = await Order.findOne({
+    _id: req.params.orderid,
+  });
+  if (!isOrderAvailable) {
+    return res.status(404).send({ message: "Order Not Found" });
+  }
+  try {
+    const response = await Order.findByIdAndDelete(req.params.orderid);
+    console.log(response);
+    return res.status(200).send({ message: "Order Deleted Successfully" });
+  } catch (err) {
+    return res
+      .status(500)
+      .send({ message: "Order Deletion Failed", error: err });
+  }
 };
 
 exports.setOrderApproval = async (req, res) => {
