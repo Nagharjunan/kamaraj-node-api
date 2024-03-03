@@ -83,7 +83,10 @@ const OrderID = mongoose.model(
   })
 );
 
-const DeletedOrder = mongoose.model("Order", new mongoose.Schema(orderSchema));
+const DeletedOrder = mongoose.model(
+  "DeletedOrder",
+  new mongoose.Schema(orderSchema)
+);
 
 const Order = mongoose.model("Order", new mongoose.Schema(orderSchema));
 
