@@ -4,6 +4,7 @@ const jsPDF = require("jspdf").jsPDF;
 const nodemailer = require("nodemailer");
 const Order = db.order;
 const OrderID = db.orderID;
+const DeletedOrder = db.deletedOrder;
 
 exports.createOrder = async (req, res) => {
   const orderID = await OrderID.find({});
@@ -95,6 +96,8 @@ exports.deleteOrder = async (req, res) => {
     return res.status(404).send({ message: "Order Not Found" });
   }
   try {
+    const deletedOrder = new DeletedOrder(isOrderAvailable);
+    const deletedOrderRes = await deletedOrder.save();
     const response = await Order.findByIdAndDelete(req.params.orderid);
     console.log(response);
     return res.status(200).send({ message: "Order Deleted Successfully" });
