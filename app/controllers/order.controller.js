@@ -96,7 +96,12 @@ exports.deleteOrder = async (req, res) => {
     return res.status(404).send({ message: "Order Not Found" });
   }
   try {
-    const deletedOrder = new DeletedOrder(isOrderAvailable);
+    const deletedOrderData = {
+      ...isOrderAvailable.toObject(),
+      _id: undefined, // Explicitly unset the _id for the new document
+      __v: undefined, // Also consider removing the version key if it's not needed
+    };
+    const deletedOrder = new DeletedOrder(deletedOrderData);
     const deletedOrderRes = await deletedOrder.save();
     const response = await Order.findByIdAndDelete(req.params.orderid);
     console.log(response);

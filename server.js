@@ -13,6 +13,8 @@ app.use(express.urlencoded({ extended: true }));
 
 const db = require("./app/models");
 
+// Dev is production and Prod is Development. (Forgot to change when going live and there is prod data present in DEV)
+
 db.mongoose
   .connect(
     "mongodb+srv://nagharjunan:ga9FK3Y3H1ldaK3j@kamaraj.93j44yk.mongodb.net/?retryWrites=true&w=majority",
