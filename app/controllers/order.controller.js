@@ -140,6 +140,32 @@ exports.setOrderApproval = async (req, res) => {
   }
 };
 
+exports.orderPayment = async (req, res) => {
+  const response = await Order.findById(req.body.orderId);
+  if (!response) {
+    res.status(404).send({ message: "No Orders Found", error: {} });
+  }
+  try {
+    await Order.updateOne(
+      { _id: req.body.orderId },
+      {
+        $set: {
+          paymentDetails: {
+            isPaymentDone: true,
+            paymentMethod: req.body.paymentMode,
+            paymentDate: Date.now(),
+          },
+        },
+      }
+    );
+    return res.status(200).send({ message: "Order Payment Successfull" });
+  } catch (err) {
+    return res
+      .status(500)
+      .send({ message: "Order Payment Failed", error: err });
+  }
+};
+
 exports.fetchOrderAndSendPDF = async (req, res) => {
   const orderId = req.params.orderId;
   try {

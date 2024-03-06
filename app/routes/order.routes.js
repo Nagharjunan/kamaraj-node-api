@@ -32,6 +32,7 @@ module.exports = (app) => {
     [authJwt.verifyToken],
     controller.setOrderApproval
   );
+  app.post("/orderpayment", [authJwt.verifyToken], controller.orderPayment);
   app.get(
     "/sendorderpdf/:orderId",
     [authJwt.verifyToken],
